@@ -2,6 +2,7 @@ import { Button, Card, Checkbox, Form, Image, Input, Space, Typography } from 'a
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SocialLogin from './components/SocialLogin'
+import handleAPI from '../../apis/handleAPI'
 
 const { Title, Paragraph, Text } = Typography
 
@@ -11,13 +12,21 @@ const Login = () => {
   const [isRemember, setIsRemember] = useState(false)
   const [form] = Form.useForm()
 
-  const handleLogin = (values: { email: string, password: string }) => {
+  const handleLogin = async (values: { email: string; password: string }) => {
     console.log(values);
-  }
+
+    try {
+      const res = await handleAPI('/auth/register', values, 'post');
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <Card style={{ width: '50%', border: 'none' }}>
         <div className="text-center">
+          <img src={'https://firebasestorage.googleapis.com/v0/b/lavvu-shoesshop.appspot.com/o/lavu-logo.png?alt=media&token=9c03e1fe-833e-4072-92ae-e50e56a8979d'} alt="" style={{ width: '80px', height: '80px' }} />
           <Title level={2}>Log in to your account</Title>
           <Paragraph type='secondary'>
             Welcome back! Please enter your details.
@@ -58,7 +67,7 @@ const Login = () => {
         </div>
 
         <div className="mt-4 mb-3">
-          <Button onClick={() => form.submit()} type='primary' style={{ width: '100%', backgroundColor: 'rgb(241, 94, 43)' }} size='large'>Login</Button>
+          <Button onClick={() => form.submit()} type='primary' style={{ width: '100%', backgroundColor: 'rgb(241, 94, 43)' }} size='large'>Log in</Button>
         </div>
 
         <SocialLogin />

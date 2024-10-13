@@ -1,7 +1,8 @@
-import { Button, Card, Checkbox, Form, Image, Input, Space, Typography } from 'antd'
+import { Button, Card, Checkbox, Form, Image, Input, message, Space, Typography } from 'antd'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SocialLogin from './components/SocialLogin'
+import handleAPI from '../../apis/handleAPI'
 
 const { Title, Paragraph, Text } = Typography
 
@@ -10,8 +11,20 @@ const SignUp = () => {
   const [isRemember, setIsRemember] = useState(false)
   const [form] = Form.useForm()
 
-  const handleLogin = (values: { email: string, password: string }) => {
-    console.log(values);
+  const handleSignUp = async (values: { email: string; password: string }) => {
+    const api = `/auth/register`
+
+    setIsLoading(true)
+
+    try {
+      const res = await handleAPI(api, values, 'post');
+      console.log(res);
+    } catch (error: any) {
+      console.log(error)
+      message.error(error.message)
+    } finally {
+      setIsLoading(false)
+    }
   }
   return (
     <>
@@ -23,7 +36,7 @@ const SignUp = () => {
           </Paragraph>
         </div>
 
-        <Form layout='vertical' form={form} onFinish={handleLogin} disabled={isLoading} size='large'>
+        <Form layout='vertical' form={form} onFinish={handleSignUp} disabled={isLoading} size='large'>
           <Form.Item
             name={'name'}
             label='Name' rules={[
@@ -53,6 +66,15 @@ const SignUp = () => {
                 required: true,
                 message: 'Please input your password!'
               },
+              () => ({
+                validator(_, value) {
+                  if (value.length < 6) {
+                    return Promise.reject(new Error('Password must be at least 6 characters'))
+                  } else {
+                    return Promise.resolve()
+                  }
+                }
+              })
             ]}>
             <Input.Password max={100} type='email' placeholder='Create a password' />
           </Form.Item>
@@ -60,8 +82,8 @@ const SignUp = () => {
 
 
 
-        <div className="mt-4 mb-3">
-          <Button onClick={() => form.submit()} type='primary' style={{ width: '100%', backgroundColor: 'rgb(241, 94, 43)' }} size='large'>Login</Button>
+        <div className="mt-5 mb-3">
+          <Button loading={isLoading} onClick={() => form.submit()} type='primary' style={{ width: '100%', backgroundColor: 'rgb(241, 94, 43)' }} size='large'>Get started</Button>
         </div>
 
         <SocialLogin />
