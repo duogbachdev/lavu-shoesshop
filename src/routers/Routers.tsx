@@ -26,6 +26,10 @@ const Routers = () => {
 
     }
   }
+
+  const handleCheckToken = async () => {
+
+  }
   return isLoading ? <Spin /> : !auth.token ? <AuthRouter /> : <MainRouter />
 }
 

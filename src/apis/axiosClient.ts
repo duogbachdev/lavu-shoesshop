@@ -1,7 +1,14 @@
 import axios from "axios";
 import queryString from "query-string";
+import { localDateNames } from "../constants/appInfor";
 
 const baseURL = `http://192.168.0.101:2210`;
+
+const getAccessToken = () => {
+  const res = localStorage.getItem(localDateNames.authData)
+
+  return res ? JSON.parse(res).token : ''
+}
 
 const axiosClient = axios.create({
   baseURL,
@@ -9,14 +16,16 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async (config: any) => {
+  const accessToken = getAccessToken()
+
   config.headers = {
-    Authorization: '',
+    Authorization: `Bearer ${accessToken}`,
     Accept: 'application/json',
     ...config.headers,
   };
 
   // If you need to debug or modify config.data, you can log it or modify it here.
-  // console.log(config.data);
+  console.log(config);
 
   return config;
 });

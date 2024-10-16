@@ -6,6 +6,7 @@ import handleAPI from '../../apis/handleAPI'
 import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { addAuth } from '../../redux/reducers/authReducers'
+import { localDateNames } from '../../constants/appInfor'
 
 const { Title, Paragraph, Text } = Typography
 
@@ -18,15 +19,21 @@ const Login = () => {
 
   const handleLogin = async (values: { email: string; password: string }) => {
     console.log(values);
-
+    setIsLoading(true)
     try {
       const res: any = await handleAPI('/auth/login', values, 'post');
       message.success(res.message)
       res.data && dispatch(addAuth(res.data))
+
+      if (isRemember) {
+        localStorage.setItem(localDateNames.authData, JSON.stringify(res.data))
+      }
     } catch (error: any) {
       message.error(error.message)
       // toast.error(error.message)
       console.log(error.message);
+    } finally {
+      setIsLoading(false)
     }
   };
   return (
@@ -74,10 +81,10 @@ const Login = () => {
         </div>
 
         <div className="mt-4 mb-3">
-          <Button onClick={() => form.submit()} type='primary' style={{ width: '100%', backgroundColor: 'rgb(241, 94, 43)' }} size='large'>Log in</Button>
+          <Button loading={isLoading} onClick={() => form.submit()} type='primary' style={{ width: '100%', backgroundColor: 'rgb(241, 94, 43)' }} size='large'>Log in</Button>
         </div>
 
-        <SocialLogin />
+        <SocialLogin isRemember={isRemember} />
         <div className="mt-4 text-center">
           <Space>
             <Text type='secondary'>Don't have an account?</Text>
