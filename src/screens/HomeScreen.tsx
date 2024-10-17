@@ -1,8 +1,8 @@
+import handleAPI from '@/apis/handleAPI'
+import { authSelector, refreshToken, removeAuth } from '@/redux/reducers/authReducers'
 import { Button, message } from 'antd'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { authSelector, refreshToken, removeAuth } from '../redux/reducers/authReducers'
-import handleAPI from '../apis/handleAPI'
 
 const HomeScreen = () => {
   const dispatch = useDispatch()
@@ -43,7 +43,7 @@ const HomeScreen = () => {
   return (
     <div>
       <Button onClick={getProducts}>Logout</Button>
-    </div>
+    </div >
   )
 }
 

@@ -1,6 +1,6 @@
+import { localDateNames } from "@/constants/appInfor";
 import axios from "axios";
 import queryString from "query-string";
-import { localDateNames } from "../constants/appInfor";
 
 const baseURL = `http://192.168.0.101:2210`;
 
@@ -27,7 +27,7 @@ axiosClient.interceptors.request.use(async (config: any) => {
   // If you need to debug or modify config.data, you can log it or modify it here.
   console.log(config);
 
-  return config;
+  return { ...config, data: config.data ?? null };
 });
 
 axiosClient.interceptors.response.use(

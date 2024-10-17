@@ -2,10 +2,10 @@ import { Button, message } from 'antd'
 import React, { useState } from 'react'
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useDispatch } from 'react-redux';
-import { auth } from '../../../firebase/firebaseConfig';
-import handleAPI from '../../../apis/handleAPI';
-import { addAuth } from '../../../redux/reducers/authReducers';
-import { localDateNames } from '../../../constants/appInfor';
+import { auth } from '@/firebase/firebaseConfig';
+import handleAPI from '@/apis/handleAPI';
+import { addAuth } from '@/redux/reducers/authReducers';
+import { localDateNames } from '@/constants/appInfor';
 
 const provider = new GoogleAuthProvider();
 provider.addScope('https://www.googleapis.com/auth/contacts.readonly');

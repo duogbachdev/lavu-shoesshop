@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import MainRouter from './MainRouter'
 import AuthRouter from './AuthRouter'
 import { useDispatch, useSelector } from 'react-redux'
-import { addAuth, authSelector, AuthState } from '../redux/reducers/authReducers'
 import { localDateNames } from '../constants/appInfor'
 import { Spin } from 'antd'
+import { addAuth, authSelector, AuthState } from '@/redux/reducers/authReducers'
 
 const Routers = () => {
 

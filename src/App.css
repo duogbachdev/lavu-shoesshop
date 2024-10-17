@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+
+.ant-menu-title-content a:hover{
+  text-decoration: none;
+}
+
+
+.custom-hover-button {
+  background-color: #F15E2B;
+  color: white;
+}
+
+.custom-hover-button:hover {
+  border-color: #F15E2B !important;  /* Màu viền ban đầu */
+  background-color: white !important;
+  color: #F15E2B !important;
+}
+

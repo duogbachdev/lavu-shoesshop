@@ -1,5 +1,5 @@
+import { localDateNames } from "@/constants/appInfor";
 import { createSlice } from "@reduxjs/toolkit";
-import { localDateNames } from "../../constants/appInfor";
 
 export interface AuthState {
   token: string,

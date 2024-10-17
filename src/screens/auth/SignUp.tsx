@@ -1,11 +1,10 @@
-import { Button, Card, Checkbox, Form, Image, Input, message, Space, Typography } from 'antd'
+import { Button, Card, Form, Input, message, Space, Typography } from 'antd'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import SocialLogin from './components/SocialLogin'
-import handleAPI from '../../apis/handleAPI'
 import { useDispatch } from 'react-redux'
-import { addAuth } from '../../redux/reducers/authReducers'
-import { localDateNames } from '../../constants/appInfor'
+import handleAPI from '@/apis/handleAPI'
+import { addAuth } from '@/redux/reducers/authReducers'
+import SocialLogin from './components/SocialLogin'
 
 const { Title, Paragraph, Text } = Typography
 

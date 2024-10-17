@@ -1,12 +1,12 @@
-import { Button, Card, Checkbox, Form, Image, Input, message, Space, Typography } from 'antd'
+import { Button, Card, Checkbox, Form, Input, message, Space, Typography } from 'antd'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import SocialLogin from './components/SocialLogin'
-import handleAPI from '../../apis/handleAPI'
 import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
-import { addAuth } from '../../redux/reducers/authReducers'
-import { localDateNames } from '../../constants/appInfor'
+import handleAPI from '@/apis/handleAPI'
+import { addAuth } from '@/redux/reducers/authReducers'
+import { localDateNames } from '@/constants/appInfor'
+import SocialLogin from './components/SocialLogin'
 
 const { Title, Paragraph, Text } = Typography
 
@@ -76,19 +76,19 @@ const Login = () => {
             <Checkbox checked={isRemember} onChange={e => setIsRemember(e.target.checked)}>Remember for 30 days</Checkbox>
           </div>
           <div className="col text-right">
-            <Link to={'/forgot-password'} style={{ color: 'rgb(241, 94, 43)' }}>Forgot password?</Link>
+            <Link to={'/forgot-password'} style={{ color: '#F15E2B' }}>Forgot password?</Link>
           </div>
         </div>
 
         <div className="mt-4 mb-3">
-          <Button loading={isLoading} onClick={() => form.submit()} type='primary' style={{ width: '100%', backgroundColor: 'rgb(241, 94, 43)' }} size='large'>Log in</Button>
+          <Button loading={isLoading} onClick={() => form.submit()} type='primary' style={{ width: '100%', backgroundColor: '#F15E2B' }} size='large'>Log in</Button>
         </div>
 
         <SocialLogin isRemember={isRemember} />
         <div className="mt-4 text-center">
           <Space>
             <Text type='secondary'>Don't have an account?</Text>
-            <Link to={'/sign-up'} style={{ color: 'rgb(241, 94, 43)' }}>Sign Up</Link>
+            <Link to={'/sign-up'} style={{ color: '#F15E2B' }}>Sign Up</Link>
           </Space>
         </div>
       </Card>

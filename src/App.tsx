@@ -21,7 +21,7 @@ function App() {
     <>
       <ConfigProvider theme={{
         token: {},
-        components: {}
+        components: {},
       }}>
         <Provider store={store}>
           <Routers />
