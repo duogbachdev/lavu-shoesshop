@@ -1,6 +1,10 @@
-import { Avatar, Button, Form, Input, Modal, Select, Typography } from 'antd'
+import handleAPI from '@/apis/handleAPI'
+import { SupplierModel } from '@/models/SupplierModel'
+import { replaceName } from '@/utils/replaceName'
+import { uploadFile } from '@/utils/uploadFile'
+import { Avatar, Button, Form, Input, message, Modal, Select, Typography } from 'antd'
 import { User } from 'iconsax-react'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 
 const { Paragraph } = Typography
@@ -8,8 +12,8 @@ const { Paragraph } = Typography
 interface Props {
   visible: boolean,
   onClose: () => void,
-  onAddNew: (val: any) => void
-  supplier?: any,
+  onAddNew: (val: SupplierModel) => void
+  supplier?: SupplierModel,
 }
 
 const ToogleSupplier = (props: Props) => {
@@ -21,23 +25,42 @@ const ToogleSupplier = (props: Props) => {
 
   const [file, setFile] = useState<any>()
 
+  const [form] = Form.useForm()
   const inpRef = useRef<any>()
 
-  const [form] = Form.useForm()
+  useEffect(() => {
+    if (supplier) {
+      form.setFieldsValue(supplier)
+      setIsTaking(supplier.isTaking === 1)
+    }
+  }, [supplier])
+
 
   const handleAddNewSupplier = async (value: any) => {
     setIsLoading(true)
+
+    const data: any = {}
+    const api = `/supplier/${supplier ? `update-supplier?id=${supplier._id}` : 'add-supplier'}`
+
+    for (const i in value) {
+      data[i] = value[i] ?? ''
+    }
+
+    data.price = value.price ? parseInt(value.price) : 0
+
+    data.isTaking = isTaking ? 1 : 0
+
+    if (file) {
+      data.photoUrl = await uploadFile(file)
+    }
+
+    data.slug = replaceName(value.name)
+
     try {
-      const data: any = {}
-
-      for (const i in value) {
-        data[i] = value[i] ?? ''
-      }
-      console.log(data);
-
-      data.price = value.price ? parseInt(value.price) : 0
-
-      data.isTaking = isTaking ? 1 : 0
+      const res: any = await handleAPI(api, data, supplier ? 'put' : 'post')
+      message.success(res.message)
+      !supplier && onAddNew(res.data)
+      handleClose()
     } catch (error) {
       console.log(error)
     } finally {
@@ -47,16 +70,19 @@ const ToogleSupplier = (props: Props) => {
 
   const handleClose = () => {
     form.resetFields()
+    setFile(undefined)
     onClose()
   }
 
   return (
-    <Modal loading={isLoading} open={visible} onClose={handleClose} onOk={() => form.submit()} onCancel={handleClose} title='New Supplier' okText='Add Supplier' cancelText='Discard'>
+    <Modal closable={!isLoading} open={visible} okButtonProps={{ loading: isLoading }} onClose={handleClose} onOk={() => form.submit()} onCancel={handleClose} title={supplier ? 'Update Supplier' : 'New Supplier'} okText={supplier ? 'Update Supplier' : 'Add Supplier'} cancelText='Discard'>
       <label htmlFor="inpFile" className="p-2 mb-3 row">
         {
-          file ? <Avatar size={100} src={URL.createObjectURL(file)}></Avatar> : <Avatar size={100} style={{ backgroundColor: 'white', border: '1px dashed #9D9D9D' }}>
-            <User size={80} color='#777777' />
-          </Avatar>
+          file ? <Avatar size={100} src={URL.createObjectURL(file)} /> :
+            supplier ? <Avatar size={100} src={supplier.photoUrl} /> :
+              <Avatar size={100} style={{ backgroundColor: 'white', border: '1px dashed #9D9D9D' }}>
+                <User size={80} color='#777777' />
+              </Avatar>
         }
 
         <div className='ml-3'>
@@ -65,7 +91,7 @@ const ToogleSupplier = (props: Props) => {
           <Button onClick={() => inpRef.current.click()} type='link'>Browse image</Button>
         </div>
       </label>
-      <Form form={form} onFinish={handleAddNewSupplier} layout='horizontal' labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} size='large'>
+      <Form disabled={isLoading} form={form} onFinish={handleAddNewSupplier} layout='horizontal' labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} size='large'>
         <Form.Item
           name={'name'}
           label='Supplier Name' rules={[{
@@ -79,6 +105,18 @@ const ToogleSupplier = (props: Props) => {
           name={'product'}
           label='Product'>
           <Input allowClear placeholder='Enter product' />
+        </Form.Item>
+
+        <Form.Item
+          name={'email'}
+          label='Email'>
+          <Input allowClear type='email' placeholder='Enter email' />
+        </Form.Item>
+
+        <Form.Item
+          name={'active'}
+          label='Active'>
+          <Input allowClear type='number' />
         </Form.Item>
 
         <Form.Item

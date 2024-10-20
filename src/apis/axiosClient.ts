@@ -25,7 +25,7 @@ axiosClient.interceptors.request.use(async (config: any) => {
   };
 
   // If you need to debug or modify config.data, you can log it or modify it here.
-  console.log(config);
+  // console.log(config);
 
   return { ...config, data: config.data ?? null };
 });
